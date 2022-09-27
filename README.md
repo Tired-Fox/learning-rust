@@ -1,20 +1,16 @@
 # Rust project to learn the language and research programming
 
+ - [x] Higher Lower Guessing Game
+ - [x] Countdown Clock
+ - [ ] Battleship with display
  - [ ] Rock, Paper, Scissors
- - [ ] Mad Libs Story Maker
- - [ ] Change Calculator
- - [ ] Mean, Median, and Mode
- - [ ] Higher Lower Guessing Game
- - [ ] Multiplication Table
- - [ ] Fibonacci Sequence
  - [ ] Hangman Game
- - [ ] Dice Rolling Simulator
- - [ ] Factors of a Number
- - [ ] Countdown Clock
- - [ ] Black Jack
- - [ ] Watch for New TIL Facts
+ - [ ] Change Calculator / Calculator
+ - [ ] Mean, Median, and Mode
+ - [ ] Multiplication Table
  - [ ] Random Wikipedia Article
- - [ ] What's the Weather?
+ - [ ] Fibonacci Sequence
+ - [ ] Factors of a Number
  - [ ] Sierpinski Triangle
  - [ ] Pomodoro Timer
  - [ ] Scarne's Dice
