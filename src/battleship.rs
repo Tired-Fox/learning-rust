@@ -1,4 +1,11 @@
+pub mod map;
+
 use std::fmt::Display;
+use map::{
+    Direction,
+    Coord,
+    Fire
+};
 
 pub struct Ship<'a> {
     name:  &'a str,
@@ -6,49 +13,6 @@ pub struct Ship<'a> {
     hits: i8,
     direction: Direction,
     coords: Vec<Coord>,
-}
-
-pub struct Coord {
-    x: u32,
-    y: u32,
-}
-
-impl Coord {
-    pub fn new(x: u32, y: u32) -> Coord {
-        Coord {
-            x,
-            y
-        }
-    }
-}
-
-impl Display for Coord {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "({}, {})", self.x, self.y)
-    }
-}
-
-pub enum Direction {
-    North,
-    South,
-    East,
-    West,
-}
-
-impl Display for Direction {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Direction::North => write!(f, "North"),
-            Direction::East => write!(f, "East"),
-            Direction::South => write!(f, "South"),
-            Direction::West => write!(f, "West"),
-        }
-    }
-}
-
-pub enum Fire<'a> {
-    Hit(&'a str),
-    Miss(&'a str),
 }
 
 impl<'a> Ship<'a> {

@@ -1,11 +1,14 @@
 extern crate learning_rust;
+
 use learning_rust::battleship::{
     Ship,
-    Direction,
-    Coord,
-    Fire::{
-        Hit,
-        Miss,
+    map::{
+        Direction,
+        Coord,
+        Fire::{
+            Hit,
+            Miss,
+        }
     }
 };
 
