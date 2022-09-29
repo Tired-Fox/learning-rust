@@ -3,20 +3,20 @@ pub mod map;
 use std::fmt::Display;
 use map::{
     Direction,
-    Coord,
-    Fire
+    Coord,    
 };
 
+#[derive(Clone)]
 pub struct Ship<'a> {
     name:  &'a str,
-    length: u32,
-    hits: i8,
+    length: u16,
+    hits: u16,
     direction: Direction,
     coords: Vec<Coord>,
 }
 
 impl<'a> Ship<'a> {
-    pub fn new(name: &str, length: u32) -> Ship {
+    pub fn new(name: &str, length: u16) -> Ship {
         Ship {
             name,
             length,
@@ -30,7 +30,7 @@ impl<'a> Ship<'a> {
         self.name
     }
 
-    pub fn length(&self) -> u32 {
+    pub fn length(&self) -> u16 {
         self.length
     }
 
@@ -38,22 +38,22 @@ impl<'a> Ship<'a> {
         match direction {
             Direction::North => { 
                 for i in 0..self.length { 
-                    self.coords.push(Coord {x: coord.x, y: coord.y + i}) 
+                    self.coords.push(Coord {x: coord.x, y: usize::try_from(i).unwrap() + coord.y}) 
                 } 
             },
             Direction::East  => { 
                 for i in 0..self.length { 
-                    self.coords.push(Coord {x: coord.x + i, y: coord.y}) 
+                    self.coords.push(Coord {x: coord.x + usize::try_from(i).unwrap(), y: coord.y}) 
                 } 
             },
             Direction::South => { 
                 for i in 0..self.length { 
-                    self.coords.push(Coord {x: coord.x, y: coord.y - i}) 
+                    self.coords.push(Coord {x: coord.x, y: coord.y - usize::try_from(i).unwrap()}) 
                 } 
             },
             Direction::West  => { 
                 for i in 0..self.length { 
-                    self.coords.push(Coord {x: coord.x - i, y: coord.y}) 
+                    self.coords.push(Coord {x: coord.x - usize::try_from(i).unwrap(), y: coord.y}) 
                 } 
             },
         }
@@ -62,38 +62,49 @@ impl<'a> Ship<'a> {
         self
     }
 
-    pub fn strike(&self, coord: Coord) -> Fire<'a> {
+    pub fn within(&self, coord: &Coord) -> bool {
         match self.direction {
             Direction::North => { 
                 if coord.x == self.coords[0].x {
                     if coord.y >= self.coords[0].y && coord.y <= self.coords.last().unwrap().y {
-                        return Fire::Hit("Hit!")
+                        return true;
                     }
                 } 
             },
             Direction::East => { 
                 if coord.y == self.coords[0].y {
                     if coord.x >= self.coords[0].x && coord.x <= self.coords.last().unwrap().x {
-                        return Fire::Hit("Hit!")
+                        return true;
                     }
                 } 
             },
             Direction::South => { 
                 if coord.x == self.coords[0].x {
                     if coord.y >= self.coords.last().unwrap().y && coord.y <= self.coords[0].y {
-                        return Fire::Hit("Hit!")
+                        return true;
                     }
                 } 
             },
             Direction::West => { 
                 if coord.y == self.coords[0].y {
                     if coord.x >= self.coords.last().unwrap().x && coord.x <= self.coords[0].x {
-                        return Fire::Hit("Hit!")
+                        return true;
                     }
                 }
             },
         }
-        return Fire::Miss("Miss!")
+        return false;
+    }
+
+    pub fn is_sunk(&self) -> bool {
+        if self.hits == self.length - 1 {
+            return true;
+        } 
+        return false;
+    }
+
+    pub fn strike(&mut self) {
+        self.hits += 1;
     }
 }
 
