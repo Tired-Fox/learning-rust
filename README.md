@@ -3,10 +3,10 @@
  - [x] Higher Lower Guessing Game
  - [x] Countdown Clock
  - [ ] Battleship with display
+ - [ ] Mean, Median, and Mode
  - [ ] Rock, Paper, Scissors
  - [ ] Hangman Game
  - [ ] Change Calculator / Calculator
- - [ ] Mean, Median, and Mode
  - [ ] Multiplication Table
  - [ ] Random Wikipedia Article
  - [ ] Fibonacci Sequence
@@ -24,3 +24,7 @@
     * Editor
     * Mini app
     * Universal GUI application for things like NVIM, VIM, AMP, Helix
+
+Crates:
+    - [tui-rs](https://github.com/fdehau/tui-rs)
+    - [crossterm](https://github.com/crossterm-rs/crossterm)

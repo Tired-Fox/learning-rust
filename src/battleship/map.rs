@@ -1,5 +1,4 @@
 use std::{fmt::Display};
-
 use super::Ship;
 
 #[derive(Clone, Copy)]
@@ -50,6 +49,7 @@ impl Display for Direction {
 pub enum CellState {
     HIT,
     MISS,
+    SUNK,
     OPEN,
 }
 
@@ -59,11 +59,13 @@ impl Display for CellState {
             CellState::HIT => write!(f, "\x1b[31mx\x1b[0m"),
             CellState::MISS => write!(f, "o"),
             CellState::OPEN => write!(f, "\x1b[34m~\x1b[0m"),
+            CellState::SUNK => write!(f, "\x1b[30mx\x1b[0m"),
         }
     }
 }
 
 pub struct Grid {
+    sunk: u8,
     ships: Vec<Ship<'static>>,
     cells: Vec<Vec<CellState>>,
 }
@@ -78,42 +80,54 @@ impl Grid {
         ships.push(Ship::new("Destroyer", 2).set_pos(Coord{x: 0, y: 0}, Direction::East));
 
         Grid { 
+            sunk: 0,
             ships,
             cells: vec![vec![CellState::OPEN; size]; size],
         }
     }
 
     pub fn update_cell(&mut self, coord: &Coord, new_state: CellState) {
-        if self.cells[coord.x][coord.y] == CellState::OPEN {
-            self.cells[coord.x][coord.y] = new_state;
-        }
+        self.cells[coord.x][coord.y] = new_state;
     }
 
-    pub fn guess(&mut self, coord: &Coord) {
-        for ship in self.ships.iter_mut() {
-            if ship.within(&coord) {
-                println!("Hit!");
+    pub fn guess(&mut self, coord: &Coord) -> bool {
+        if self.cells[coord.x][coord.y] == CellState::OPEN {
+            for ship in 0..self.ships.len() {
+                if self.ships[ship].within(&coord) {    
+                    self.ships[ship].strike();
+                    self.update_cell(&coord, CellState::HIT);
 
-                ship.strike();
-                self.update_cell(&coord, CellState::HIT);
-                return;
+                    let curr_ship = self.ships[ship].clone();
+                    if self.ships[ship].is_sunk() {
+                        self.sunk += 1;
+                        for i in 0..self.ships[ship].coords.len() {
+                            let coord = curr_ship.coords[i].clone();
+                            self.update_cell(&coord, CellState::SUNK);
+                        }
+                    } 
+
+                    return true;
+                }
             }
+            
+            self.update_cell(&coord, CellState::MISS);
+            return true;
+        } else {
+            return false;
         }
-        
-        self.update_cell(&coord, CellState::MISS);
-        println!("Miss!");
     }
 }
 
 impl Display for Grid {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut map: String = String::new();
-        for x in self.cells.iter() {
-            for y in x.iter() {
-                map.push_str(&format!("  {}", y));
-            }
-            map.push_str("\n");
+        let mut map: Vec<String> = vec![String::new(); self.cells.len()];
+
+        for x in 0..self.cells.len() {
+            for y in 0..self.cells[x].len() {
+                map[y].push_str(&format!("  {}", self.cells[x][y]));
+            }            
         }
-        write!(f, "{}", map)
+        
+        write!(f, "{}", map.join("\n"))
     }
 }

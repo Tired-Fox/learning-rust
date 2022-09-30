@@ -26,14 +26,6 @@ impl<'a> Ship<'a> {
         }
     }
 
-    pub fn name(&self) -> &'a str {
-        self.name
-    }
-
-    pub fn length(&self) -> u16 {
-        self.length
-    }
-
     pub fn set_pos(mut self, coord: Coord, direction: Direction) -> Self {
         match direction {
             Direction::North => { 

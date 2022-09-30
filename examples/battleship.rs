@@ -13,7 +13,11 @@ fn main() {
     let guess: Coord = Coord::new(8, 11);
     println!("Firing at position {}:", guess);
     
+    map.guess(&Coord::new(11, 11));
+    map.guess(&Coord::new(10, 11));
+    map.guess(&Coord::new(9, 11));
     map.guess(&guess);
-    map.guess(&Coord::new(14, 14));
+    map.guess(&Coord::new(7, 11));
+    map.guess(&Coord::new(6, 11));
     println!("{}", map);
 }
